@@ -20,7 +20,7 @@ function App() {
 
   return (
     <Router>
-      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-gray-200 to-indigo-100">
+      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-gray-200 to-slate-400">
         <Routes>
           <Route path="/" element={user ? <Navigate to="/profile" /> : <Login />} />
           <Route path="/" element={<Login />} />
