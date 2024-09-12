@@ -1,37 +1,32 @@
 import { useState, useEffect } from "react";
-import { auth, dataBase } from "../components/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { auth, dataBase } from "../components/firebase";
+
 import Card from "../components/Card";
-import { useNavigate } from "react-router-dom";
 
 function Profile() {
-  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState(null);
 
-  const fetchData = async () => {
-    auth.onAuthStateChanged(async (user) => {
-      console.log(user);
-
-      const docRef = doc(dataBase, "Users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setUserDetails(docSnap.data());
-        console.log(docSnap.data());
-      } else {
-        console.log("user not found");
+  useEffect(() => {
+    const fetchData = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const docRef = doc(dataBase, "Users", user?.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setUserDetails(docSnap.data());
+        } else {
+          console.log("user not found");
+        }
       }
     });
-  };
 
-  useEffect(() => {
-    fetchData();
+    return () => fetchData();
   }, []);
 
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      navigate("/login");
-      console.log("logout successfully");
+      window.location.href = "/login";
     } catch (error) {
       console.log(error.message);
     }
@@ -41,16 +36,28 @@ function Profile() {
     <Card>
       {userDetails ? (
         <>
-          <div className="flex flex-col items-center justify-center p-6">
-            <p className="text-3xl font-bold">Welcome {userDetails.firstName}</p>
-            <div className="py-4">
-              <p>Email: {userDetails.email}</p>
-              <p>First Name: {userDetails.firstName}</p>
-              <p>Last Name: {userDetails.lastName}</p>
+          <div className="flex flex-col py-10 h-full">
+            <div className="flex flex-row items-center justify-center gap-1">
+              <p className="text-3xl font-bold">Hello,</p>
+              <p className="text-3xl font-bold">
+                {userDetails.firstName} {userDetails.lastName}
+              </p>
             </div>
-            <button className="w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold" onClick={handleLogout}>
-              Logout
-            </button>
+            <div className="flex flex-col items-center justify-center pt-12">
+              <p>Here is your personal detail :</p>
+              <div className="text-start">
+                <p>First Name : {userDetails.firstName ?? "-"}</p>
+                <p>Last Name : {userDetails.lastName ?? "-"}</p>
+                <p>Email : {userDetails.email ?? "-"}</p>
+                <p>Password : {userDetails.password ?? "******"}</p>
+              </div>
+            </div>
+            <p className="text-center text-lg font-bold pt-2">Hope your days all well.</p>
+            <div className="flex items-end justify-center h-full">
+              <button className="w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
           </div>
         </>
       ) : null}
