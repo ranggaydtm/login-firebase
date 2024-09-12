@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { FaFacebookF, FaGithub, FaGooglePlusG, FaLinkedinIn } from "react-icons/fa";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, dataBase } from "../components/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { FaFacebookF, FaGithub, FaGooglePlusG, FaLinkedinIn } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
 import Card from "../components/Card";
-import { toast } from "react-toastify";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -18,6 +18,7 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoad(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
@@ -28,19 +29,19 @@ function Register() {
           lastName: lname,
         });
       }
-      console.log(user);
-      toast("Registered Successfully!!", {
+      toast.success("Registered Successfully!!", {
         position: "top-center",
       });
     } catch (error) {
       console.log(error.message);
-      toast(error.message, {
-        position: "bottom-center",
+      toast.error(error.message, {
+        position: "top-center",
       });
     } finally {
       setLoad(false);
     }
   };
+
   return (
     <Card>
       <div className="flex items-center justify-center">
@@ -91,11 +92,13 @@ function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <button className="w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold">{load ? "Loading" : "Sign Up"}</button>
+            <button className={`w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold ${load && "opacity-50"}`} disabled={load}>
+              {load ? "Loading" : "Sign Up"}
+            </button>
           </form>
           <div className="flex flex-row gap-1 mt-4 items-center justify-center">
             <p className="text-sm">Already registered?</p>
-            <a href="/login" className="font-semibold text-sm">
+            <a href="/login" className="font-semibold text-sm hover:underline">
               Login
             </a>
           </div>

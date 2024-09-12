@@ -12,21 +12,24 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [load, setLoad] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoad(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast("Login Successfully", {
         position: "top-center",
       });
       navigate("/profile");
-      console.log("login success");
     } catch (error) {
       console.log(error.message);
       toast.error(error.message, {
         position: "top-center",
       });
+    } finally {
+      setLoad(false);
     }
   };
 
@@ -70,7 +73,9 @@ function Login() {
                 Forget Password?
               </a>
             </span>
-            <button className="w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold">Sign In</button>
+            <button className={`w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold ${load && "opacity-50"}`} disabled={load}>
+              {load ? "Loading" : "Sign In"}
+            </button>
           </form>
           <div className="flex flex-row gap-1 mt-4 items-center justify-center">
             <p className="text-sm">Don't have account?</p>
