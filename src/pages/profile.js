@@ -54,7 +54,7 @@ function Profile() {
             </div>
             <p className="text-center text-lg font-bold pt-2">Hope your days all well.</p>
             <div className="flex items-end justify-center h-full">
-              <button className="w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold" onClick={handleLogout}>
+              <button className="w-[120px] bg-slate-600 text-white py-2 rounded-md font-bold" onClick={handleLogout}>
                 Logout
               </button>
             </div>

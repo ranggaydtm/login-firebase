@@ -92,7 +92,7 @@ function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <button className={`w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold ${load && "opacity-50"}`} disabled={load}>
+            <button className={`w-[120px] bg-slate-600 text-white py-2 rounded-md font-bold ${load && "opacity-50"}`} disabled={load}>
               {load ? "Loading" : "Sign Up"}
             </button>
           </form>

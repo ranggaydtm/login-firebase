@@ -73,7 +73,7 @@ function Login() {
                 Forget Password?
               </a>
             </span>
-            <button className={`w-[120px] bg-purple-600 text-white py-2 rounded-md font-bold ${load && "opacity-50"}`} disabled={load}>
+            <button className={`w-[120px] bg-slate-600 text-white py-2 rounded-md font-bold ${load && "opacity-50"}`} disabled={load}>
               {load ? "Loading" : "Sign In"}
             </button>
           </form>
